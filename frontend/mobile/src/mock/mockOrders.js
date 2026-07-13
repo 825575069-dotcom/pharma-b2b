@@ -1,0 +1,116 @@
+// 订单 mock 数据 - 8条
+export const mockOrders = [
+  {
+    id: 'ORD202607100001', type: '采购订单', status: '已完成', statusColor: '#10B981',
+    createTime: '2026-07-10 14:23', payTime: '2026-07-10 14:25', shipTime: '2026-07-11 09:15', receiveTime: '2026-07-12 10:30',
+    totalPrice: 286.50, discountAmount: 30.00, pointsUsed: 0, pointsEarned: 286, payMethod: '线上支付',
+    address: '广东省深圳市南山区科技园南区T3栋8楼',
+    logistics: { company: '顺丰速运', trackingNo: 'SF1234567890', traces: [
+      { time: '2026-07-12 10:30', content: '已签收，签收人：张明' },
+      { time: '2026-07-12 08:00', content: '快件已到达深圳南山区派送点' },
+      { time: '2026-07-11 15:30', content: '快件已从广州转运中心发出' },
+      { time: '2026-07-11 09:15', content: '卖家已发货' }
+    ]},
+    items: [
+      { productId: 'P0001', name: '阿莫西林胶囊', spec: '0.25g*24粒/盒', price: 18.50, quantity: 10, colorBg: '#DBEAFE', image: '/static/images/products/P0001.png' },
+      { productId: 'P0004', name: '连花清瘟胶囊', spec: '0.35g*24粒/盒', price: 14.80, quantity: 5, colorBg: '#FEE2E2', image: '/static/images/products/P0004.png' },
+      { productId: 'P0007', name: '板蓝根颗粒', spec: '10g*20袋/包', price: 12.80, quantity: 5, colorBg: '#FEF3C7', image: '/static/images/products/P0007.png' }
+    ]
+  },
+  {
+    id: 'ORD202607080002', type: '采购订单', status: '待收货', statusColor: '#F59E0B',
+    createTime: '2026-07-08 10:15', payTime: '2026-07-08 10:18', shipTime: '2026-07-09 08:30', receiveTime: null,
+    totalPrice: 458.00, discountAmount: 68.70, pointsUsed: 50, pointsEarned: 408, payMethod: '对公转账',
+    address: '广东省深圳市宝安区西乡街道固戍社区仓储中心B区',
+    logistics: { company: '京东物流', trackingNo: 'JD0987654321', traces: [
+      { time: '2026-07-10 12:00', content: '快件已到达深圳宝安派送点，预计今日送达' },
+      { time: '2026-07-09 20:00', content: '快件已从东莞转运中心发出' },
+      { time: '2026-07-09 08:30', content: '卖家已发货' }
+    ]},
+    items: [
+      { productId: 'P0003', name: '复方丹参滴丸', spec: '27mg*150丸/瓶', price: 36.00, quantity: 5, colorBg: '#DBEAFE', image: '/static/images/products/P0003.png' },
+      { productId: 'P0015', name: '硝酸甘油片', spec: '0.5mg*100片/瓶', price: 15.00, quantity: 8, colorBg: '#FEE2E2', image: '/static/images/products/P0015.png' },
+      { productId: 'P0016', name: '阿托伐他汀钙片', spec: '20mg*7片/盒', price: 45.00, quantity: 5, colorBg: '#E0E7FF', image: '/static/images/products/P0016.png' }
+    ]
+  },
+  {
+    id: 'ORD202607050003', type: '采购订单', status: '已完成', statusColor: '#10B981',
+    createTime: '2026-07-05 16:45', payTime: '2026-07-05 16:48', shipTime: '2026-07-06 09:00', receiveTime: '2026-07-07 14:20',
+    totalPrice: 128.50, discountAmount: 0, pointsUsed: 0, pointsEarned: 128, payMethod: '账期赊购',
+    address: '广东省深圳市南山区科技园南区T3栋8楼',
+    logistics: { company: '中通快递', trackingNo: 'ZT5678901234', traces: [
+      { time: '2026-07-07 14:20', content: '已签收，签收人：张明' },
+      { time: '2026-07-07 09:00', content: '快件派送中' },
+      { time: '2026-07-06 09:00', content: '卖家已发货' }
+    ]},
+    items: [
+      { productId: 'P0008', name: '健胃消食片', spec: '0.8g*36片/盒', price: 9.90, quantity: 5, colorBg: '#FEF3C7', image: '/static/images/products/P0008.png' },
+      { productId: 'P0014', name: '蒙脱石散', spec: '3g*15袋/盒', price: 28.50, quantity: 2, colorBg: '#D1FAE5', image: '/static/images/products/P0014.png' },
+      { productId: 'P0011', name: '感冒灵颗粒', spec: '10g*9袋/盒', price: 8.50, quantity: 5, colorBg: '#DBEAFE', image: '/static/images/products/P0011.png' }
+    ]
+  },
+  {
+    id: 'ORD202607030004', type: '采购订单', status: '已取消', statusColor: '#9CA3AF',
+    createTime: '2026-07-03 11:20', payTime: null, shipTime: null, receiveTime: null,
+    totalPrice: 216.00, discountAmount: 0, pointsUsed: 0, pointsEarned: 0, payMethod: '',
+    address: '广东省深圳市南山区科技园南区T3栋8楼', logistics: null, cancelReason: '用户主动取消',
+    items: [
+      { productId: 'P0006', name: '维生素C片', spec: '0.1g*100片/瓶', price: 5.50, quantity: 12, colorBg: '#D1FAE5', image: '/static/images/products/P0006.png' },
+      { productId: 'P0010', name: '钙尔奇D片', spec: '600mg*30片/瓶', price: 48.00, quantity: 3, colorBg: '#FEF3C7', image: '/static/images/products/P0010.png' }
+    ]
+  },
+  {
+    id: 'ORD202607010005', type: '采购订单', status: '已完成', statusColor: '#10B981',
+    createTime: '2026-07-01 09:30', payTime: '2026-07-01 09:35', shipTime: '2026-07-02 08:15', receiveTime: '2026-07-03 15:00',
+    totalPrice: 892.00, discountAmount: 133.80, pointsUsed: 100, pointsEarned: 792, payMethod: '线上支付',
+    address: '广东省深圳市宝安区西乡街道固戍社区仓储中心B区',
+    logistics: { company: '德邦快递', trackingNo: 'DB3456789012', traces: [
+      { time: '2026-07-03 15:00', content: '已签收，签收人：李仓管' },
+      { time: '2026-07-03 10:00', content: '快件派送中' },
+      { time: '2026-07-02 08:15', content: '卖家已发货' }
+    ]},
+    items: [
+      { productId: 'P0016', name: '阿托伐他汀钙片', spec: '20mg*7片/盒', price: 45.00, quantity: 10, colorBg: '#E0E7FF', image: '/static/images/products/P0016.png' },
+      { productId: 'P0003', name: '复方丹参滴丸', spec: '27mg*150丸/瓶', price: 36.00, quantity: 8, colorBg: '#DBEAFE', image: '/static/images/products/P0003.png' },
+      { productId: 'P0015', name: '硝酸甘油片', spec: '0.5mg*100片/瓶', price: 15.00, quantity: 12, colorBg: '#FEE2E2', image: '/static/images/products/P0015.png' }
+    ]
+  },
+  {
+    id: 'PTS202607100006', type: '积分兑换', status: '已完成', statusColor: '#10B981',
+    createTime: '2026-07-10 20:15', payTime: '2026-07-10 20:15', shipTime: '2026-07-11 10:00', receiveTime: '2026-07-12 11:00',
+    totalPrice: 0, discountAmount: 0, pointsUsed: 500, pointsEarned: 0, payMethod: '积分兑换',
+    address: '广东省深圳市南山区科技园南区T3栋8楼',
+    logistics: { company: '圆通速递', trackingNo: 'YT6789012345', traces: [
+      { time: '2026-07-12 11:00', content: '已签收，签收人：张明' },
+      { time: '2026-07-11 10:00', content: '卖家已发货' }
+    ]},
+    items: [{ productId: 'PTS001', name: '便携式电子体温计', spec: '1个装', price: 0, quantity: 1, colorBg: '#CFFAFE', image: '/static/images/points/PP001.png' }]
+  },
+  {
+    id: 'ORD202606280007', type: '采购订单', status: '已完成', statusColor: '#10B981',
+    createTime: '2026-06-28 13:00', payTime: '2026-06-28 13:05', shipTime: '2026-06-29 09:00', receiveTime: '2026-06-30 16:30',
+    totalPrice: 156.00, discountAmount: 15.60, pointsUsed: 0, pointsEarned: 140, payMethod: '线上支付',
+    address: '广东省深圳市南山区科技园南区T3栋8楼',
+    logistics: { company: '顺丰速运', trackingNo: 'SF1111222233', traces: [
+      { time: '2026-06-30 16:30', content: '已签收，签收人：张明' },
+      { time: '2026-06-29 09:00', content: '卖家已发货' }
+    ]},
+    items: [
+      { productId: 'P0009', name: '氯雷他定片', spec: '10mg*6片/盒', price: 19.50, quantity: 4, colorBg: '#FCE7F3', image: '/static/images/products/P0009.png' },
+      { productId: 'P0002', name: '布洛芬缓释胶囊', spec: '0.3g*20粒/盒', price: 25.80, quantity: 3, colorBg: '#DBEAFE', image: '/static/images/products/P0002.png' }
+    ]
+  },
+  {
+    id: 'PTS202606250008', type: '积分兑换', status: '已完成', statusColor: '#10B981',
+    createTime: '2026-06-25 19:00', payTime: '2026-06-25 19:00', shipTime: '2026-06-26 10:00', receiveTime: '2026-06-27 14:00',
+    totalPrice: 0, discountAmount: 0, pointsUsed: 300, pointsEarned: 0, payMethod: '积分兑换',
+    address: '广东省深圳市南山区科技园南区T3栋8楼',
+    logistics: { company: '中通快递', trackingNo: 'ZT9999888877', traces: [
+      { time: '2026-06-27 14:00', content: '已签收，签收人：张明' },
+      { time: '2026-06-26 10:00', content: '卖家已发货' }
+    ]},
+    items: [{ productId: 'PTS002', name: '医用外科口罩(50只装)', spec: '50只/盒', price: 0, quantity: 2, colorBg: '#DBEAFE', image: '/static/images/points/PP002.png' }]
+  }
+]
+
+export default mockOrders

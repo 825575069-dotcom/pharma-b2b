@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>医药B2B平台 - 移动端预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  body {
+    background: #0f172a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .header {
+    flex-shrink: 0;
+    padding: 12px 20px 8px;
+    text-align: center;
+  }
+  .header h1 {
+    color: #f1f5f9;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .header .subtitle {
+    color: #64748b;
+    font-size: 12px;
+  }
+  .phones-container {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 0 16px;
+    min-height: 0;
+  }
+  .phone-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .phone-label {
+    color: #e2e8f0;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .phone-label .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #2563EB;
+  }
+  .phone {
+    width: 320px;
+    height: 640px;
+    background: #1e293b;
+    border-radius: 44px;
+    padding: 8px;
+    box-shadow:
+      0 0 0 1px #334155,
+      0 16px 48px rgba(0,0,0,0.5);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 22px;
+    background: #1e293b;
+    border-radius: 16px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 36px;
+    overflow: hidden;
+    background: #1e293b;
+    position: relative;
+  }
+  .phone-screen iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background: #fff;
+  }
+  .iframe-loading {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 13px;
+    gap: 10px;
+    background: #fff;
+    z-index: 5;
+    transition: opacity 0.3s ease;
+  }
+  .iframe-loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .iframe-loading .spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #2563EB;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .phone::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: #475569;
+    border-radius: 4px;
+    z-index: 10;
+  }
+  .hint {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 11px;
+  }
+  .actions {
+    flex-shrink: 0;
+    padding: 8px 0 12px;
+    display: flex;
+    gap: 12px;
+  }
+  .btn {
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: #e2e8f0;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    background: #334155;
+  }
+  @media (max-width: 720px) {
+    .phones-container {
+      flex-direction: column;
+      gap: 12px;
+      padding: 8px;
+    }
+    .phone {
+      width: 280px;
+      height: 560px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>医药B2B私域一体化平台 · 移动端预览</h1>
+    <p class="subtitle">左：客户商城 / 右：业务员工作台</p>
+  </div>
+  <div class="phones-container">
+    <div class="phone-wrapper">
+      <div class="phone-label"><span class="dot"></span>客户商城</div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="iframe-loading" id="loading1">
+            <div class="spinner"></div>
+            <div>加载中...</div>
+          </div>
+          <iframe id="iframe1" src="http://localhost:5174/" onload="handleLoad(1)" loading="eager" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        </div>
+      </div>
+      <p class="hint">localhost:5174</p>
+    </div>
+    <div class="phone-wrapper">
+      <div class="phone-label"><span class="dot"></span>业务员工作台</div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="iframe-loading" id="loading2">
+            <div class="spinner"></div>
+            <div>加载中...</div>
+          </div>
+          <iframe id="iframe2" src="http://localhost:5175/" onload="handleLoad(2)" loading="eager" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        </div>
+      </div>
+      <p class="hint">localhost:5175</p>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn" onclick="reloadFrames()">刷新预览</button>
+    <button class="btn" onclick="openDirect()">新窗口打开</button>
+  </div>
+
+<script>
+  function cacheBuster(url) {
+    return url + (url.indexOf('?') > -1 ? '&' : '?') + 't=' + Date.now();
+  }
+  function handleLoad(idx) {
+    var loading = document.getElementById('loading' + idx);
+    if (loading) loading.classList.add('hidden');
+  }
+  function reloadFrames() {
+    document.querySelectorAll('iframe').forEach(function(iframe) {
+      var base = iframe.src.split('?')[0];
+      iframe.src = cacheBuster(base);
+    });
+    document.querySelectorAll('.iframe-loading').forEach(function(el) {
+      el.classList.remove('hidden');
+    });
+  }
+  function openDirect() {
+    window.open(cacheBuster('http://localhost:5174/'), 'mobile');
+    window.open(cacheBuster('http://localhost:5175/'), 'sales');
+  }
+  // 初始加载加时间戳防缓存
+  document.querySelectorAll('iframe').forEach(function(iframe) {
+    var base = iframe.src.split('?')[0];
+    iframe.src = cacheBuster(base);
+  });
+  // 超时提示
+  setTimeout(function() {
+    document.querySelectorAll('.iframe-loading').forEach(function(el) {
+      if (!el.classList.contains('hidden')) {
+        el.innerHTML = '<div style="color:#EF4444;font-size:12px;text-align:center;padding:0 16px;">加载超时<br>请点「新窗口打开」</div>';
+      }
+    });
+  }, 15000);
+</script>
+</body>
+</html>
