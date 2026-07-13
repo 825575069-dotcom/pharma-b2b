@@ -1,0 +1,9 @@
+{
+  "name": "pharma-b2b-backend",
+  "version": "1.0.0",
+  "description": "Pharma B2B backend placeholder",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

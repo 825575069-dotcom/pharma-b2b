@@ -20,92 +20,12 @@
     <view :style="{ height: statusBarHeight + 44 + 'px' }"></view>
 
     <scroll-view scroll-y class="page-scroll" :style="{ height: `calc(100vh - ${statusBarHeight + 44}px)` }" @scrolltolower="loadMore">
-      <!-- 动态渲染模块 -->
-      <view v-for="(module, idx) in channel.modules" :key="idx" class="module-wrap">
-        <!-- 轮播图模块 -->
-        <view v-if="module.type === 'banner'" class="banner-module">
-          <swiper class="banner-swiper" circular autoplay :interval="4000" indicator-dots indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff">
-            <swiper-item v-for="(item, bIdx) in module.list" :key="bIdx">
-              <view class="banner-item" :style="{ background: item.bg }">
-                <image class="banner-image" :src="item.image" mode="aspectFill" />
-                <view class="banner-text-wrap">
-                  <text class="banner-title" :style="{ color: item.text }">{{ item.title }}</text>
-                  <text class="banner-desc" :style="{ color: item.text }">{{ item.desc }}</text>
-                </view>
-              </view>
-            </swiper-item>
-          </swiper>
-        </view>
-
-        <!-- 公告模块 -->
-        <view v-else-if="module.type === 'notice'" class="notice-module">
-          <view class="notice-icon" :style="{ background: channel.themeColor }">
-            <text class="notice-icon-text">!</text>
-          </view>
-          <text class="notice-text">{{ module.text }}</text>
-        </view>
-
-        <!-- 分类网格模块 -->
-        <view v-else-if="module.type === 'category-grid'" class="section-card">
-          <text v-if="module.title" class="module-title">{{ module.title }}</text>
-          <view class="category-grid">
-            <view v-for="(cat, cIdx) in module.categories" :key="cIdx" class="category-item" @tap="goCategory(cat)">
-              <view class="category-icon" :style="{ background: cat.bg }">
-                <text v-if="cat.icon && cat.icon.length <= 2" class="category-emoji">{{ cat.icon }}</text>
-                <wx-icon v-else :name="cat.icon" size="40" />
-              </view>
-              <text class="category-text">{{ cat.name }}</text>
-            </view>
-          </view>
-        </view>
-
-        <!-- 商品列表模块 -->
-        <view v-else-if="module.type === 'product-list'" class="section-card">
-          <view class="module-header">
-            <text class="module-title">{{ module.title }}</text>
-            <text class="module-more" @tap="goMoreProducts">更多 ></text>
-          </view>
-          <view v-if="module.layout === 'grid'" class="product-grid">
-            <view v-for="product in module.products" :key="product.id" class="product-card" @tap="goProductDetail(product)">
-              <view class="product-img-wrap">
-                <image class="product-img" :src="product.image" mode="aspectFill" />
-              </view>
-              <view class="product-info">
-                <text class="product-name ellipsis-2">{{ product.name }} {{ product.spec }}</text>
-                <text class="product-manufacturer ellipsis">{{ product.manufacturer }}</text>
-                <view class="product-tags">
-                  <text v-for="tag in product.tags.slice(0, 2)" :key="tag" class="product-tag">{{ tag }}</text>
-                </view>
-                <view class="product-bottom">
-                  <text class="product-price">¥{{ product.price.toFixed(2) }}</text>
-                  <text class="product-sales">已售{{ product.sales }}</text>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
-
-        <!-- 活动模块 -->
-        <view v-else-if="module.type === 'activity'" class="section-card">
-          <view class="module-header">
-            <text class="module-title">{{ module.title }}</text>
-            <text class="module-more">更多 ></text>
-          </view>
-          <scroll-view scroll-x class="activity-scroll" show-scrollbar="false">
-            <view class="activity-list">
-              <view v-for="(act, aIdx) in module.list" :key="aIdx" class="activity-card" :style="{ background: act.bg }">
-                <text class="activity-tag" :style="{ background: act.text, color: '#fff' }">{{ act.type }}</text>
-                <text class="activity-title" :style="{ color: act.text }">{{ act.title }}</text>
-                <text class="activity-desc" :style="{ color: act.text }">{{ act.desc }}</text>
-              </view>
-            </view>
-          </scroll-view>
-        </view>
-      </view>
-
-      <view class="load-more">
-        <text class="load-more-text">— 已经到底了 —</text>
-      </view>
+      <mall-channel-content
+        :channel="channel"
+        @goCategory="goCategory"
+        @goProductDetail="goProductDetail"
+        @goMoreProducts="goMoreProducts"
+      />
     </scroll-view>
   </view>
 </template>

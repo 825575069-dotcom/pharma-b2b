@@ -128,16 +128,19 @@ export default {
 
   .tab-list {
     display: flex;
+    flex-wrap: nowrap;
     padding: 0 12rpx;
   }
 
   .tab-item {
     display: inline-flex;
+    flex-shrink: 0;
     padding: 20rpx 24rpx;
 
     .tab-text {
       font-size: 28rpx;
       color: #6B7280;
+      white-space: nowrap;
 
       &.active {
         color: #2563EB;

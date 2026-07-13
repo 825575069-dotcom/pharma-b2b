@@ -9,7 +9,7 @@
     </view>
 
     <!-- 消息列表 -->
-    <scroll-view scroll-y class="msg-scroll">
+    <scroll-view scroll-y="true" scroll-with-animation="false" enhanced="true" show-scrollbar="false" class="msg-scroll">
       <view v-for="msg in messages" :key="msg.id" class="msg-item" :class="{ unread: !msg.read }" @tap="readMessage(msg)">
         <view class="msg-dot" v-if="!msg.read"></view>
         <view class="msg-icon-wrap" :style="{ background: msg.typeColor + '20' }">
@@ -115,6 +115,8 @@ export default {
 
 .msg-scroll {
   height: calc(100vh - 80rpx);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .msg-item {
@@ -125,6 +127,10 @@ export default {
   border-radius: 12rpx;
   padding: 20rpx;
   position: relative;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout paint;
 
   &.unread {
     background: #f0f7ff;

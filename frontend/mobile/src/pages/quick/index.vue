@@ -974,7 +974,7 @@ export default {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 200;
+  z-index: 9999;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -987,6 +987,20 @@ export default {
   background: #fff;
   border-radius: 24rpx 24rpx 0 0;
   padding: 24rpx;
+}
+
+.filter-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 500rpx;
+  max-height: 80vh;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+}
+
+.filter-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .filter-header,

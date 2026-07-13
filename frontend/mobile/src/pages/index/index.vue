@@ -24,7 +24,14 @@
       <!-- 分类商城入口 -->
       <scroll-view scroll-x class="function-scroll" show-scrollbar="false">
         <view class="function-list">
-          <view v-for="(item, idx) in mallChannels" :key="idx" class="function-item" :style="{ background: item.themeColor }" @tap="goMallChannel(item)">
+          <view
+            v-for="(item, idx) in mallChannels"
+            :key="idx"
+            class="function-item"
+            :class="{ active: currentMall && currentMall.id === item.id }"
+            :style="{ background: item.themeColor }"
+            @tap="selectMall(item)"
+          >
             <text class="function-text">{{ item.name }}</text>
           </view>
         </view>
@@ -35,7 +42,9 @@
     <view :style="{ height: headerHeight + 'px' }"></view>
 
     <scroll-view scroll-y class="page-scroll" :style="{ height: `calc(100vh - ${headerHeight}px)` }" @scroll="onScroll" @scrolltolower="loadMore">
-      <!-- 品牌轮播图 -->
+      <!-- 默认首页内容 -->
+      <view v-if="!currentMall" class="home-content">
+        <!-- 品牌轮播图 -->
       <view class="banner-wrap">
         <swiper class="banner-swiper" circular autoplay :interval="4000" indicator-dots indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff">
           <swiper-item v-for="(item, idx) in banners" :key="idx">
@@ -170,9 +179,28 @@
           </view>
         </view>
       </view>
+      </view>
 
-      <view class="load-more">
+      <view class="load-more" v-if="!currentMall">
         <text class="load-more-text">— 已经到底了 —</text>
+      </view>
+
+      <!-- 子商城内容 -->
+      <view v-else class="mall-content">
+        <view class="mall-back-bar" :style="{ background: currentMall.themeColor }">
+          <view class="back-btn" @tap="clearMall">
+            <text class="back-icon">‹</text>
+            <text class="back-text">首页</text>
+          </view>
+          <text class="mall-name">{{ currentMall.name }}</text>
+          <view class="mall-right"></view>
+        </view>
+        <mall-channel-content
+          :channel="currentMall"
+          @goCategory="goCategory"
+          @goProductDetail="goProductDetail"
+          @goMoreProducts="goCategoryPage"
+        />
       </view>
     </scroll-view>
   </view>
@@ -180,6 +208,7 @@
 
 <script>
 import { store } from '../../store/index.js'
+import MallChannelContent from '../../components/mall-channel-content.vue'
 import { mockMallConfig } from '../../mock/mockMallConfig.js'
 import { mockMallChannels } from '../../mock/mockMallChannels.js'
 import { mockActivities } from '../../mock/mockActivities.js'
@@ -188,6 +217,7 @@ import { mockProducts } from '../../mock/mockProducts.js'
 import { mockPoints } from '../../mock/mockPoints.js'
 
 export default {
+  components: { MallChannelContent },
   data() {
     return {
       store,
@@ -196,6 +226,7 @@ export default {
       headerHeight: 0,
       scrolled: false,
       viewMode: 'list',
+      currentMall: null,
       banners: mockMallConfig.banners,
       activities: mockActivities,
       videos: mockVideos,
@@ -243,6 +274,16 @@ export default {
     },
     goMallChannel(item) {
       uni.navigateTo({ url: `/pages/mall/channel?id=${item.id}` })
+    },
+    selectMall(item) {
+      if (this.currentMall && this.currentMall.id === item.id) {
+        this.currentMall = null
+      } else {
+        this.currentMall = item
+      }
+    },
+    clearMall() {
+      this.currentMall = null
     },
     goQuickEntry(cat) {
       if (cat.path === '/pages/quick/index' || cat.path === '/pages/cart/index' || cat.path === '/pages/video/index') {
@@ -433,6 +474,11 @@ export default {
       &:active {
         opacity: 0.85;
         transform: scale(0.96);
+      }
+
+      &.active {
+        box-shadow: 0 0 0 4rpx rgba(255, 255, 255, 0.45), 0 6rpx 16rpx rgba(0, 0, 0, 0.12);
+        transform: scale(1.04);
       }
     }
   }
@@ -944,6 +990,44 @@ export default {
   .load-more-text {
     font-size: 24rpx;
     color: #9CA3AF;
+  }
+}
+
+.mall-content {
+  .mall-back-bar {
+    height: 88rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24rpx;
+    color: #fff;
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      padding: 10rpx 16rpx 10rpx 0;
+
+      .back-icon {
+        font-size: 32rpx;
+        line-height: 1;
+        margin-right: 8rpx;
+        font-weight: 400;
+      }
+
+      .back-text {
+        font-size: 26rpx;
+        font-weight: 500;
+      }
+    }
+
+    .mall-name {
+      font-size: 30rpx;
+      font-weight: 600;
+    }
+
+    .mall-right {
+      width: 88rpx;
+    }
   }
 }
 </style>
