@@ -37,6 +37,9 @@ ssh -o StrictHostKeyChecking=no "$SERVER_USER@$SERVER_HOST" << EOF
   nginx -t
   systemctl reload nginx
 
+  # 确保证书部署有效（初次部署或证书更新后）
+  /usr/bin/certbot install --cert-name newb2.gdjztw.com --nginx --redirect --non-interactive 2>/dev/null || true
+
   # 重启后端
   cd backend
   npm install

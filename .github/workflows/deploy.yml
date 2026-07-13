@@ -77,6 +77,9 @@ jobs:
             nginx -t
             systemctl reload nginx
 
+            # Ensure SSL certificate is deployed (safe to run on every deploy)
+            /usr/bin/certbot install --cert-name newb2.gdjztw.com --nginx --redirect --non-interactive 2>/dev/null || true
+
             # Restart backend
             cd backend
             npm install
