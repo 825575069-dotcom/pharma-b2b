@@ -6,8 +6,6 @@
         <text class="nav-title">短视频专区</text>
       </view>
     </view>
-    <view :style="{ height: statusBarHeight + 44 + 'px' }"></view>
-
     <!-- 顶部分类标签 -->
     <scroll-view scroll-x class="tab-scroll" show-scrollbar="false">
       <view class="tab-list">
@@ -94,16 +92,14 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: calc(100vh - 100rpx);
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 .custom-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  flex-shrink: 0;
   background: #fff;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 
@@ -122,6 +118,7 @@ export default {
 }
 
 .tab-scroll {
+  flex-shrink: 0;
   white-space: nowrap;
   background: #fff;
   border-bottom: 1rpx solid #f0f0f0;
@@ -155,7 +152,9 @@ export default {
 }
 
 .video-list-scroll {
-  height: calc(100vh - 180rpx);
+  flex: 1;
+  height: 100%;
+  min-height: 0;
 }
 
 .video-grid {

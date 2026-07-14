@@ -156,32 +156,32 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "static/tabbar/home.png",
-        "selectedIconPath": "static/tabbar/home-active.png"
+        "iconPath": "static/tabbar/home-v4.png",
+        "selectedIconPath": "static/tabbar/home-active-v4.png"
       },
       {
         "pagePath": "pages/quick/index",
         "text": "快捷采购",
-        "iconPath": "static/tabbar/category.png",
-        "selectedIconPath": "static/tabbar/category-active.png"
+        "iconPath": "static/tabbar/category-v4.png",
+        "selectedIconPath": "static/tabbar/category-active-v4.png"
       },
       {
         "pagePath": "pages/video/index",
         "text": "视频学术",
-        "iconPath": "static/tabbar/video.png",
-        "selectedIconPath": "static/tabbar/video-active.png"
+        "iconPath": "static/tabbar/video-v4.png",
+        "selectedIconPath": "static/tabbar/video-active-v4.png"
       },
       {
         "pagePath": "pages/cart/index",
         "text": "采购车",
-        "iconPath": "static/tabbar/cart.png",
-        "selectedIconPath": "static/tabbar/cart-active.png"
+        "iconPath": "static/tabbar/cart-v4.png",
+        "selectedIconPath": "static/tabbar/cart-active-v4.png"
       },
       {
         "pagePath": "pages/mine/index",
         "text": "我的",
-        "iconPath": "static/tabbar/mine.png",
-        "selectedIconPath": "static/tabbar/mine-active.png"
+        "iconPath": "static/tabbar/mine-v4.png",
+        "selectedIconPath": "static/tabbar/mine-active-v4.png"
       }
     ]
   }

@@ -277,12 +277,15 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 .video-player {
   position: relative;
+  flex-shrink: 0;
   height: 520rpx;
   background: #1f2937;
 
@@ -394,7 +397,9 @@ export default {
 }
 
 .content-scroll {
-  height: calc(100vh - 520rpx - 100rpx);
+  flex: 1;
+  height: 100%;
+  min-height: 0;
 }
 
 .video-info-section {

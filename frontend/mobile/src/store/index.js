@@ -31,6 +31,27 @@ function addToCart(product, quantity = 1) {
   }
 }
 
+function addSkuToCart(product, sku, quantity = 1) {
+  const cartId = sku && sku.id ? sku.id : product.id
+  const existing = state.cart.find(item => item.productId === cartId)
+  if (existing) {
+    existing.quantity += quantity
+    return
+  }
+  state.cart.push({
+    productId: cartId,
+    skuId: sku && sku.id ? sku.id : null,
+    name: product.name,
+    spec: sku && sku.spec ? sku.spec : product.spec,
+    price: sku && sku.price ? sku.price : product.price,
+    quantity,
+    colorBg: product.colorBg,
+    image: product.image,
+    selected: true,
+    maxStock: sku && sku.stock ? sku.stock : product.stock
+  })
+}
+
 function removeFromCart(productId) {
   const idx = state.cart.findIndex(item => item.productId === productId)
   if (idx > -1) state.cart.splice(idx, 1)
@@ -92,6 +113,7 @@ function toggleCollect(productId) {
 const store = {
   state,
   addToCart,
+  addSkuToCart,
   removeFromCart,
   updateCartQuantity,
   toggleSelect,

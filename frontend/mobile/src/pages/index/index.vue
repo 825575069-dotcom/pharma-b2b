@@ -38,10 +38,7 @@
       </scroll-view>
     </view>
 
-    <!-- 占位 -->
-    <view :style="{ height: headerHeight + 'px' }"></view>
-
-    <scroll-view scroll-y class="page-scroll" :style="{ height: `calc(100vh - ${headerHeight}px)` }" @scroll="onScroll" @scrolltolower="loadMore">
+    <scroll-view scroll-y class="page-scroll" @scroll="onScroll" @scrolltolower="loadMore">
       <!-- 默认首页内容 -->
       <view v-if="!currentMall" class="home-content">
         <!-- 品牌轮播图 -->
@@ -187,13 +184,8 @@
 
       <!-- 子商城内容 -->
       <view v-else class="mall-content">
-        <view class="mall-back-bar" :style="{ background: currentMall.themeColor }">
-          <view class="back-btn" @tap="clearMall">
-            <text class="back-icon">‹</text>
-            <text class="back-text">首页</text>
-          </view>
-          <text class="mall-name">{{ currentMall.name }}</text>
-          <view class="mall-right"></view>
+        <view class="mall-fab-back" @tap="clearMall">
+          <text class="fab-back-icon">‹</text>
         </view>
         <mall-channel-content
           :channel="currentMall"
@@ -223,7 +215,6 @@ export default {
       store,
       mallConfig: mockMallConfig,
       statusBarHeight: 20,
-      headerHeight: 0,
       scrolled: false,
       viewMode: 'list',
       currentMall: null,
@@ -249,9 +240,6 @@ export default {
   onLoad() {
     const sysInfo = uni.getSystemInfoSync()
     this.statusBarHeight = sysInfo.statusBarHeight || 20
-    // 头部总高度：状态栏 + 导航栏44px + 搜索栏88rpx + 功能入口72rpx
-    const rpx2px = sysInfo.windowWidth / 750
-    this.headerHeight = this.statusBarHeight + 44 + (160 * rpx2px)
   },
   onPullDownRefresh() {
     setTimeout(() => {
@@ -352,16 +340,14 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: calc(100vh - 100rpx);
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 .home-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  flex-shrink: 0;
   background: linear-gradient(180deg, #3B82F6 0%, #60A5FA 100%);
   border-radius: 0 0 24rpx 24rpx;
   box-shadow: 0 8rpx 32rpx rgba(59, 130, 246, 0.2);
@@ -485,6 +471,9 @@ export default {
 }
 
 .page-scroll {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
   background: #f5f6fa;
 }
 
@@ -994,39 +983,27 @@ export default {
 }
 
 .mall-content {
-  .mall-back-bar {
-    height: 88rpx;
+  padding-top: var(--status-bar-height);
+
+  .mall-fab-back {
+    position: fixed;
+    left: 20rpx;
+    top: calc(var(--status-bar-height) + 20rpx);
+    z-index: 50;
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 24rpx;
+    justify-content: center;
     color: #fff;
 
-    .back-btn {
-      display: flex;
-      align-items: center;
-      padding: 10rpx 16rpx 10rpx 0;
-
-      .back-icon {
-        font-size: 32rpx;
-        line-height: 1;
-        margin-right: 8rpx;
-        font-weight: 400;
-      }
-
-      .back-text {
-        font-size: 26rpx;
-        font-weight: 500;
-      }
-    }
-
-    .mall-name {
-      font-size: 30rpx;
-      font-weight: 600;
-    }
-
-    .mall-right {
-      width: 88rpx;
+    .fab-back-icon {
+      font-size: 44rpx;
+      line-height: 1;
+      margin-top: -4rpx;
     }
   }
 }

@@ -16,10 +16,7 @@
       </view>
     </view>
 
-    <!-- 占位 -->
-    <view :style="{ height: statusBarHeight + 44 + 'px' }"></view>
-
-    <scroll-view scroll-y class="page-scroll" :style="{ height: `calc(100vh - ${statusBarHeight + 44}px)` }" @scrolltolower="loadMore">
+    <scroll-view scroll-y class="page-scroll" @scrolltolower="loadMore">
       <mall-channel-content
         :channel="channel"
         @goCategory="goCategory"
@@ -139,16 +136,14 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 .custom-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  flex-shrink: 0;
 
   .nav-content {
     height: 44px;
@@ -205,6 +200,9 @@ export default {
 }
 
 .page-scroll {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
   background: #f5f6fa;
 }
 

@@ -18,7 +18,7 @@
     </view>
 
     <!-- 搜索栏 + 筛选/一键加购 -->
-    <view class="search-filter-row" :style="{ top: statusBarHeight + 44 + 'px' }">
+    <view class="search-filter-row">
       <view class="search-bar" @tap="goSearch">
         <view class="search-placeholder">商品名/通用名/厂家/品牌/批准文号</view>
         <wx-icon class="search-icon" name="search" size="28" />
@@ -36,7 +36,7 @@
     </view>
 
     <!-- 标签筛选 -->
-    <view class="tab-bar" :style="{ top: statusBarHeight + 44 + 48 + 'px' }">
+    <view class="tab-bar">
       <scroll-view scroll-x class="tab-scroll" show-scrollbar="false">
         <view class="tab-list">
           <view v-for="(tab, idx) in tabs" :key="idx" class="tab-item" :class="{ active: currentTab === idx }" @tap="changeTab(idx)">
@@ -57,9 +57,9 @@
       </view>
     </view>
 
-    <view class="body" :style="{ paddingTop: topBarHeight + 'px' }">
+    <view class="body">
       <!-- 排序栏 -->
-      <view class="sort-bar" :style="{ top: topBarHeight - 40 + 'px' }">
+      <view class="sort-bar">
         <view class="sort-item" :class="{ active: currentSort === 'default' }" @tap="changeSort('default')">
           <text>默认</text>
           <text class="sort-arrow" :class="{ active: currentSort === 'default' }">▼</text>
@@ -74,7 +74,7 @@
       </view>
 
       <!-- 商品列表 -->
-      <scroll-view scroll-y class="product-scroll" :style="{ height: scrollViewHeight }" @scrolltolower="loadMore">
+      <scroll-view scroll-y class="product-scroll" @scrolltolower="loadMore">
         <view class="product-list" :class="{ 'grid-view': viewMode === 'grid' }">
           <view v-for="product in filteredProducts" :key="product.id" class="product-card">
             <image class="product-img" :src="product.image" mode="aspectFill" />
@@ -99,8 +99,8 @@
                   <text class="product-unit">/{{ product.unit }}</text>
                 </view>
                 <view class="action-btns">
-                  <view class="add-btn" @tap.stop="addToCart(product)">
-                    <wx-icon name="cart" size="28" />
+                  <view class="add-btn" @tap.stop="openSku(product)">
+                    <text class="add-icon">+</text>
                   </view>
                   <view class="more-btn" @tap.stop="showMoreActions(product)">
                     <text class="more-dots">...</text>
@@ -114,8 +114,6 @@
         <view v-if="filteredProducts.length === 0" class="empty">
           <text class="empty-text">暂无商品</text>
         </view>
-
-        <view style="height: 120rpx;"></view>
       </scroll-view>
     </view>
 
@@ -195,6 +193,51 @@
         </view>
       </view>
     </view>
+
+    <!-- 规格选择弹窗 -->
+    <view v-if="showSkuPanel" class="sku-popup" @tap="closeSku">
+      <view class="sku-mask"></view>
+      <view class="sku-content" @tap.stop>
+        <view class="sku-header">
+          <image v-if="skuProduct" class="sku-image" :src="skuProduct.image" mode="aspectFill" />
+          <view class="sku-info">
+            <text class="sku-price">¥{{ skuPrice.toFixed(2) }}</text>
+            <text class="sku-stock">库存 {{ skuStock }} 件</text>
+            <text class="sku-selected">已选：{{ selectedSku ? selectedSku.spec : '请选择规格' }}</text>
+          </view>
+          <text class="sku-close" @tap="closeSku">×</text>
+        </view>
+
+        <view class="sku-section">
+          <text class="sku-label">规格包装</text>
+          <view class="sku-list">
+            <view
+              v-for="sku in skuProduct ? skuProduct.skus : []"
+              :key="sku.id"
+              class="sku-item"
+              :class="{ active: selectedSku && selectedSku.id === sku.id }"
+              @tap="selectSku(sku)"
+            >
+              <text class="sku-spec">{{ sku.spec }}</text>
+              <text class="sku-item-price">¥{{ sku.price.toFixed(2) }}/{{ sku.unit }}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="sku-section row">
+          <text class="sku-label">采购数量</text>
+          <view class="qty-stepper">
+            <view class="qty-btn" :class="{ disabled: skuQuantity <= 1 }" @tap="changeSkuQuantity(-1)">-</view>
+            <text class="qty-num">{{ skuQuantity }}</text>
+            <view class="qty-btn" @tap="changeSkuQuantity(1)">+</view>
+          </view>
+        </view>
+
+        <view class="sku-footer">
+          <view class="sku-confirm" @tap="confirmAddToCart">加入采购车</view>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -221,6 +264,10 @@ export default {
       showFilterPanel: false,
       showCategoryPanel: false,
       showMorePanel: false,
+      showSkuPanel: false,
+      skuProduct: null,
+      selectedSku: null,
+      skuQuantity: 1,
       selectedChannel: '全部',
       selectedPrice: '全部',
       selectedCategory: '全部',
@@ -254,23 +301,35 @@ export default {
     cartTotal() {
       return store.state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
     },
-    topBarHeight() {
-      // statusBar + 44px nav + 96rpx search row + 88rpx tab + 80rpx sort
-      return this.statusBarHeight + 44 + 48 + 44 + 40
+    skuPrice() {
+      if (!this.skuProduct) return 0
+      if (this.selectedSku) return this.selectedSku.price
+      return this.skuProduct.price
     },
-    scrollViewHeight() {
-      const bottomBarHeight = 50 // 100rpx
-      return `calc(100vh - ${this.topBarHeight + bottomBarHeight}px)`
+    skuStock() {
+      if (!this.skuProduct) return 0
+      if (this.selectedSku) return this.selectedSku.stock
+      return this.skuProduct.stock
     }
   },
   onLoad() {
     this.statusBarHeight = uni.getSystemInfoSync().statusBarHeight || 20
+    this.initProductSkus()
     this.updateTabCounts()
   },
   onShow() {
     this.updateTabCounts()
   },
   methods: {
+    initProductSkus() {
+      this.products.forEach(p => {
+        p.skus = [
+          { id: p.id + '-S1', spec: p.spec, price: p.price, unit: p.unit, packaging: p.packaging, stock: p.stock },
+          { id: p.id + '-S2', spec: p.spec.replace(/300盒|200盒|400盒|320盒|500盒|150盒|100盒/, '1000盒'), price: Math.round(p.price * 0.85 * 100) / 100, unit: p.unit, packaging: '1000盒', stock: Math.floor(p.stock / 2) },
+          { id: p.id + '-S3', spec: p.spec.replace(/300盒|200盒|400盒|320盒|500盒|150盒|100盒/, '50盒'), price: Math.round(p.price * 1.15 * 100) / 100, unit: p.unit, packaging: '50盒', stock: Math.floor(p.stock / 5) }
+        ]
+      })
+    },
     updateTabCounts() {
       this.tabs[2].label = `未购(${this.products.filter(p => !p.isPurchased).length})`
       this.tabs[3].label = `收藏(${this.products.filter(p => p.isCollected).length})`
@@ -345,6 +404,33 @@ export default {
       store.addToCart(product, 1)
       uni.showToast({ title: '已加入采购车', icon: 'success' })
     },
+    openSku(product) {
+      this.skuProduct = product
+      this.selectedSku = product.skus && product.skus.length ? product.skus[0] : null
+      this.skuQuantity = 1
+      this.showSkuPanel = true
+    },
+    closeSku() {
+      this.showSkuPanel = false
+    },
+    selectSku(sku) {
+      this.selectedSku = sku
+    },
+    changeSkuQuantity(delta) {
+      const next = this.skuQuantity + delta
+      if (next < 1) return
+      this.skuQuantity = next
+    },
+    confirmAddToCart() {
+      if (!this.skuProduct) return
+      if (!this.selectedSku) {
+        uni.showToast({ title: '请选择规格', icon: 'none' })
+        return
+      }
+      store.addSkuToCart(this.skuProduct, this.selectedSku, this.skuQuantity)
+      this.closeSku()
+      uni.showToast({ title: '已加入采购车', icon: 'success' })
+    },
     oneClickAdd() {
       this.filteredProducts.forEach(p => store.addToCart(p, 1))
       uni.showToast({ title: '已将全部商品加入采购车', icon: 'success' })
@@ -374,16 +460,14 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: calc(100vh - 100rpx);
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 .custom-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  flex-shrink: 0;
   background: #fff;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
 
@@ -439,11 +523,7 @@ export default {
 }
 
 .search-filter-row {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 99;
+  flex-shrink: 0;
   height: 96rpx;
   background: #fff;
   display: flex;
@@ -526,10 +606,7 @@ export default {
 }
 
 .tab-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 98;
+  flex-shrink: 0;
   height: 88rpx;
   background: #fff;
   display: flex;
@@ -623,14 +700,15 @@ export default {
 }
 
 .body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   box-sizing: border-box;
 }
 
 .sort-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 97;
+  flex-shrink: 0;
   height: 80rpx;
   background: #fff;
   display: flex;
@@ -668,6 +746,9 @@ export default {
 }
 
 .product-scroll {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
   background: #f5f6fa;
 }
 
@@ -852,6 +933,13 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+
+      .add-icon {
+        font-size: 40rpx;
+        color: #fff;
+        font-weight: 300;
+        line-height: 1;
+      }
     }
 
     .more-btn {
@@ -967,7 +1055,8 @@ export default {
 
 .filter-popup,
 .category-popup,
-.more-popup {
+.more-popup,
+.sku-popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -978,6 +1067,164 @@ export default {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+}
+
+.sku-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.sku-content {
+  width: 100%;
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 24rpx;
+  position: relative;
+  z-index: 1;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+
+  .sku-header {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 24rpx;
+
+    .sku-image {
+      width: 180rpx;
+      height: 180rpx;
+      border-radius: 16rpx;
+      background: #f5f6fa;
+      margin-right: 20rpx;
+      flex-shrink: 0;
+    }
+
+    .sku-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .sku-price {
+        font-size: 38rpx;
+        font-weight: 700;
+        color: #EF4444;
+      }
+
+      .sku-stock {
+        font-size: 24rpx;
+        color: #6B7280;
+        margin-top: 8rpx;
+      }
+
+      .sku-selected {
+        font-size: 24rpx;
+        color: #1f2937;
+        margin-top: 8rpx;
+      }
+    }
+
+    .sku-close {
+      font-size: 44rpx;
+      color: #9CA3AF;
+      margin-left: 16rpx;
+      line-height: 1;
+    }
+  }
+
+  .sku-section {
+    margin-bottom: 24rpx;
+
+    &.row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sku-label {
+      font-size: 28rpx;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 16rpx;
+      display: block;
+    }
+
+    .sku-list {
+      display: flex;
+      flex-wrap: wrap;
+
+      .sku-item {
+        display: flex;
+        flex-direction: column;
+        padding: 16rpx 24rpx;
+        border-radius: 12rpx;
+        background: #f5f6fa;
+        margin-right: 16rpx;
+        margin-bottom: 16rpx;
+        border: 2rpx solid transparent;
+
+        &.active {
+          background: #EFF6FF;
+          border-color: #2563EB;
+        }
+
+        .sku-spec {
+          font-size: 26rpx;
+          color: #1f2937;
+        }
+
+        .sku-item-price {
+          font-size: 22rpx;
+          color: #6B7280;
+          margin-top: 6rpx;
+        }
+      }
+    }
+
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+
+      .qty-btn {
+        width: 56rpx;
+        height: 56rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f5f6fa;
+        border-radius: 12rpx;
+        font-size: 32rpx;
+        color: #1f2937;
+
+        &.disabled {
+          color: #C0C4CC;
+        }
+      }
+
+      .qty-num {
+        min-width: 64rpx;
+        text-align: center;
+        font-size: 30rpx;
+        color: #1f2937;
+      }
+    }
+  }
+
+  .sku-footer {
+    padding-top: 16rpx;
+
+    .sku-confirm {
+      height: 88rpx;
+      background: #2563EB;
+      border-radius: 44rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 32rpx;
+      font-weight: 600;
+    }
+  }
 }
 
 .filter-content,

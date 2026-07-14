@@ -3,7 +3,7 @@
     <!-- 侧边栏 -->
     <div class="sidebar" :class="{ collapsed: isCollapsed }">
       <div class="logo">
-        <img src="/favicon.svg" alt="logo" />
+        <img :src="favicon" alt="logo" />
         <span v-show="!isCollapsed" class="logo-text">医药B2B管理后台</span>
       </div>
       <el-scrollbar class="menu-scroll">
@@ -129,6 +129,7 @@ import { useRoute } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { dashboardData } from '@/mock/mockDashboard'
 import { roleMenuMap } from '@/mock/mockPermissions'
+import favicon from '@/assets/favicon.svg'
 
 const route = useRoute()
 const userStore = useUserStore()

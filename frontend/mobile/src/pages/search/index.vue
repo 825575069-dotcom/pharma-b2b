@@ -27,7 +27,7 @@
       </view>
     </view>
 
-    <view class="body" :style="{ paddingTop: statusBarHeight + 44 + 'px' }">
+    <view class="body">
       <!-- 未搜索时展示推荐和历史 -->
       <view v-if="!hasSearched" class="search-panel">
         <!-- 搜索历史 -->
@@ -59,7 +59,7 @@
         <view class="result-count">
           <text class="result-text">共找到 <text class="count-num">{{ resultList.length }}</text> 个商品</text>
         </view>
-        <scroll-view scroll-y class="result-scroll" :style="{ height: `calc(100vh - ${statusBarHeight + 44 + 76}rpx)` }">
+        <scroll-view scroll-y class="result-scroll">
           <view class="product-list">
             <view v-for="product in resultList" :key="product.id" class="product-card" @tap="goDetail(product)">
               <image class="product-img" :src="product.image" mode="aspectFill" />
@@ -215,16 +215,14 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 .custom-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  flex-shrink: 0;
   background: #fff;
   border-bottom: 1rpx solid #f0f0f0;
 
@@ -307,14 +305,18 @@ export default {
 }
 
 .body {
-  min-height: 100vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   box-sizing: border-box;
 }
 
 .search-panel {
+  flex: 1;
   background: #fff;
   padding: 24rpx;
-  min-height: 100vh;
+  overflow-y: auto;
 }
 
 .panel-section {
@@ -367,6 +369,11 @@ export default {
 }
 
 .result-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
   .result-count {
     padding: 20rpx 24rpx;
     background: #f5f6fa;
@@ -383,6 +390,9 @@ export default {
   }
 
   .result-scroll {
+    flex: 1;
+    height: 100%;
+    min-height: 0;
     background: #f5f6fa;
   }
 }

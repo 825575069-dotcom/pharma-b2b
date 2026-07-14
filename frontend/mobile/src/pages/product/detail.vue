@@ -19,7 +19,7 @@
     </view>
 
     <!-- Tab 导航 -->
-    <view class="tab-nav" :style="{ top: statusBarHeight + 44 + 'px' }">
+    <view class="tab-nav">
       <view class="tab-item" :class="{ active: activeTab === 'product' }" @tap="activeTab = 'product'">
         <text>商品</text>
       </view>
@@ -31,7 +31,7 @@
       </view>
     </view>
 
-    <scroll-view scroll-y class="detail-scroll" :style="{ paddingTop: statusBarHeight + 44 + 40 + 'px' }">
+    <scroll-view scroll-y class="detail-scroll">
       <!-- 商品 Tab -->
       <view v-if="activeTab === 'product'">
         <!-- 商品轮播图 -->
@@ -270,17 +270,15 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 /* 自定义导航栏 */
 .custom-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+  flex-shrink: 0;
   background: #fff;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
 
@@ -356,10 +354,7 @@ export default {
 
 /* Tab 导航 */
 .tab-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 999;
+  flex-shrink: 0;
   height: 80rpx;
   background: #fff;
   display: flex;
@@ -402,6 +397,9 @@ export default {
 }
 
 .detail-scroll {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
   box-sizing: border-box;
 }
 
@@ -744,10 +742,7 @@ export default {
 
 /* 底部操作栏 */
 .bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  flex-shrink: 0;
   height: 100rpx;
   background: #fff;
   display: flex;

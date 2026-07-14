@@ -124,11 +124,14 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: calc(100vh - 44px);
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 .points-header {
+  flex-shrink: 0;
   background: linear-gradient(135deg, #2563EB, #3B82F6);
   padding: 40rpx 24rpx;
 
@@ -159,6 +162,7 @@ export default {
 }
 
 .filter-bar {
+  flex-shrink: 0;
   display: flex;
   background: #fff;
   padding: 16rpx 0;
@@ -184,7 +188,9 @@ export default {
 }
 
 .product-scroll {
-  height: calc(100vh - 320rpx);
+  flex: 1;
+  height: auto;
+  min-height: 0;
 }
 
 .product-grid {

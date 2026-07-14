@@ -148,11 +148,14 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: calc(100vh - 44px - 100rpx);
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
 .tab-bar {
+  flex-shrink: 0;
   display: flex;
   background: #fff;
   height: 88rpx;
@@ -180,6 +183,7 @@ export default {
 }
 
 .status-scroll {
+  flex-shrink: 0;
   white-space: nowrap;
   background: #fff;
   padding: 16rpx 0;
@@ -214,7 +218,9 @@ export default {
 }
 
 .order-scroll {
-  height: calc(100vh - 180rpx);
+  flex: 1;
+  height: 100%;
+  min-height: 0;
 }
 
 .order-card {

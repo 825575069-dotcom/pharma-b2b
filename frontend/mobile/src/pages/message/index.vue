@@ -84,7 +84,9 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
 }
 
@@ -114,7 +116,9 @@ export default {
 }
 
 .msg-scroll {
-  height: calc(100vh - 80rpx);
+  flex: 1;
+  height: auto;
+  min-height: 0;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }

@@ -2,7 +2,7 @@
   <div class="login-page">
     <div class="login-box">
       <div class="login-header">
-        <img src="/favicon.svg" alt="logo" />
+        <img :src="favicon" alt="logo" />
         <h1>医药B2B私域一体化平台</h1>
         <p>管理后台</p>
       </div>
@@ -22,6 +22,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import favicon from '@/assets/favicon.svg'
 
 const router = useRouter()
 const formRef = ref()

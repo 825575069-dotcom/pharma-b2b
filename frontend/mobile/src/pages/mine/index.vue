@@ -61,19 +61,19 @@
       </view>
       <view class="order-tabs">
         <view class="order-tab" @tap="goOrderList('待付款')">
-          <text class="tab-icon"><wx-icon name="money" size="36" /></text>
+          <view class="tab-icon icon-pay"><wx-icon name="money" size="36" /></view>
           <text class="tab-text">待付款</text>
         </view>
         <view class="order-tab" @tap="goOrderList('待发货')">
-          <text class="tab-icon"><wx-icon name="box" size="36" /></text>
+          <view class="tab-icon icon-ship"><wx-icon name="box" size="36" /></view>
           <text class="tab-text">待发货</text>
         </view>
         <view class="order-tab" @tap="goOrderList('待收货')">
-          <text class="tab-icon"><wx-icon name="truck" size="36" /></text>
+          <view class="tab-icon icon-receive"><wx-icon name="truck" size="36" /></view>
           <text class="tab-text">待收货</text>
         </view>
         <view class="order-tab" @tap="goOrderList('已完成')">
-          <text class="tab-icon"><wx-icon name="check" size="36" /></text>
+          <view class="tab-icon icon-done"><wx-icon name="check" size="36" /></view>
           <text class="tab-text">已完成</text>
         </view>
       </view>
@@ -86,34 +86,28 @@
       </view>
       <view class="func-list">
         <view class="func-item" @tap="goPoints">
-          <text class="func-icon"><wx-icon name="gift" size="44" /></text>
+          <view class="func-icon"><wx-icon name="gift" size="44" /></view>
           <text class="func-text">积分商城</text>
-          <text class="func-arrow">></text>
         </view>
         <view class="func-item" @tap="goPointsDetail">
-          <text class="func-icon"><wx-icon name="chart" size="44" /></text>
+          <view class="func-icon"><wx-icon name="chart" size="44" /></view>
           <text class="func-text">积分明细</text>
-          <text class="func-arrow">></text>
         </view>
         <view class="func-item" @tap="goCollect">
-          <text class="func-icon"><wx-icon name="star" size="44" /></text>
+          <view class="func-icon"><wx-icon name="star" size="44" /></view>
           <text class="func-text">我的收藏</text>
-          <text class="func-arrow">></text>
         </view>
         <view class="func-item" @tap="goHistory">
-          <text class="func-icon"><wx-icon name="video" size="44" /></text>
+          <view class="func-icon"><wx-icon name="video" size="44" /></view>
           <text class="func-text">浏览视频历史</text>
-          <text class="func-arrow">></text>
         </view>
         <view class="func-item" @tap="goSubscribe">
-          <text class="func-icon"><wx-icon name="bell" size="44" /></text>
+          <view class="func-icon"><wx-icon name="bell" size="44" /></view>
           <text class="func-text">缺货订阅</text>
-          <text class="func-arrow">></text>
         </view>
         <view class="func-item" @tap="goAddress">
-          <text class="func-icon"><wx-icon name="location" size="44" /></text>
+          <view class="func-icon"><wx-icon name="location" size="44" /></view>
           <text class="func-text">收货地址管理</text>
-          <text class="func-arrow">></text>
         </view>
       </view>
     </view>
@@ -176,22 +170,22 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  min-height: calc(100vh - 100rpx);
   background: #f5f6fa;
 }
 
 .header-bg {
-  background: #fff;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
   padding-bottom: 24rpx;
   padding-top: 24rpx;
 }
 
 .user-card {
   margin: 0 24rpx;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 24rpx;
   padding: 30rpx;
-  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
 
   .user-top {
     display: flex;
@@ -202,7 +196,7 @@ export default {
     width: 100rpx;
     height: 100rpx;
     border-radius: 50%;
-    background: #DBEAFE;
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -222,12 +216,12 @@ export default {
     .user-name {
       font-size: 34rpx;
       font-weight: 700;
-      color: #1f2937;
+      color: #fff;
     }
 
     .user-company {
       font-size: 24rpx;
-      color: #6B7280;
+      color: rgba(255, 255, 255, 0.85);
       margin-top: 4rpx;
     }
 
@@ -237,7 +231,7 @@ export default {
       .level-text {
         font-size: 20rpx;
         color: #F59E0B;
-        background: rgba(245, 158, 11, 0.12);
+        background: rgba(255, 255, 255, 0.9);
         padding: 2rpx 12rpx;
         border-radius: 8rpx;
       }
@@ -247,7 +241,7 @@ export default {
   .settings-btn {
     .settings-icon {
       font-size: 40rpx;
-      color: #6B7280;
+      color: #fff;
     }
   }
 
@@ -256,7 +250,7 @@ export default {
     align-items: center;
     margin-top: 30rpx;
     padding-top: 24rpx;
-    border-top: 1rpx solid #f0f0f0;
+    border-top: 1rpx solid rgba(255, 255, 255, 0.2);
 
     .stat-item {
       flex: 1;
@@ -267,12 +261,12 @@ export default {
       .stat-num {
         font-size: 36rpx;
         font-weight: 700;
-        color: #1f2937;
+        color: #fff;
       }
 
       .stat-label {
         font-size: 22rpx;
-        color: #6B7280;
+        color: rgba(255, 255, 255, 0.85);
         margin-top: 4rpx;
       }
     }
@@ -280,7 +274,7 @@ export default {
     .stat-divider {
       width: 1rpx;
       height: 60rpx;
-      background: #f0f0f0;
+      background: rgba(255, 255, 255, 0.2);
     }
   }
 }
@@ -372,6 +366,18 @@ export default {
 
     .tab-icon {
       font-size: 44rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 50%;
+      margin-bottom: 4rpx;
+
+      &.icon-pay { color: #fff; background: #F59E0B; }
+      &.icon-ship { color: #fff; background: #3B82F6; }
+      &.icon-receive { color: #fff; background: #10B981; }
+      &.icon-done { color: #fff; background: #8B5CF6; }
     }
 
     .tab-text {
@@ -383,30 +389,37 @@ export default {
 }
 
 .func-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 16rpx 0 8rpx;
+
   .func-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 24rpx;
-    border-bottom: 1rpx solid #f5f5f5;
-
-    &:last-child {
-      border-bottom: none;
-    }
+    justify-content: flex-start;
+    width: 25%;
+    padding: 24rpx 8rpx;
+    box-sizing: border-box;
 
     .func-icon {
-      font-size: 36rpx;
-      margin-right: 20rpx;
+      width: 88rpx;
+      height: 88rpx;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14rpx;
+      color: #2563EB;
+      font-size: 44rpx;
     }
 
     .func-text {
-      flex: 1;
-      font-size: 28rpx;
+      font-size: 24rpx;
       color: #1f2937;
-    }
-
-    .func-arrow {
-      font-size: 28rpx;
-      color: #9CA3AF;
+      text-align: center;
+      line-height: 1.3;
     }
   }
 }

@@ -179,13 +179,17 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: calc(100vh - 44px - 100rpx);
+  display: flex;
+  flex-direction: column;
   background: #f5f6fa;
   padding-bottom: env(safe-area-inset-bottom);
 }
 
 .cart-scroll {
-  height: calc(100vh - 120rpx);
+  flex: 1;
+  height: 100%;
+  min-height: 0;
 }
 
 .cart-item {
@@ -372,10 +376,7 @@ export default {
 }
 
 .bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  flex-shrink: 0;
   height: 110rpx;
   background: #fff;
   display: flex;
