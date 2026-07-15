@@ -63,3 +63,7 @@ cd frontend/sales && npm install && npm run dev:h5
 ## 安全
 
 所有密码 / 密钥 / SSH 私钥**不入库**，通过 CI Secrets 或企业版密钥管理注入。详见 `DEPLOY.md` 顶部说明。
+
+## CI 自动部署验证
+
+本仓库已接入 GitHub Actions 自动部署：向 `main` 分支 push（或经 PR 合入）会触发 `.github/workflows/deploy.yml`，自动完成前端构建、代码同步与后端服务重启。分支策略与部署规范见 `DEPLOY.md`。
