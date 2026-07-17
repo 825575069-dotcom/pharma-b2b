@@ -49,7 +49,8 @@
                 <text v-for="tag in product.tags.slice(0, 2)" :key="tag" class="product-tag">{{ tag }}</text>
               </view>
               <view class="product-bottom">
-                <text class="product-price">¥{{ product.price.toFixed(2) }}</text>
+                <text v-if="$auth.isLoggedIn" class="product-price">¥{{ product.price.toFixed(2) }}</text>
+                <text v-else class="product-price price-mask" @tap="$auth.goLogin()">登录后查看</text>
                 <text class="product-sales">售{{ product.sales }}</text>
               </view>
             </view>

@@ -73,8 +73,9 @@
               <div class="quick-name text-ellipsis">{{ product.name }}</div>
               <div class="quick-spec text-ellipsis">{{ product.spec }}</div>
               <div class="quick-price-row">
-                <span class="quick-price">¥{{ product.price.toFixed(2) }}</span>
-                <span class="quick-origin">¥{{ product.originPrice.toFixed(2) }}</span>
+                <span v-if="userStore.isLoggedIn" class="quick-price">¥{{ product.price.toFixed(2) }}</span>
+                <span v-else class="quick-price price-mask" @click="userStore.goLogin()">登录后查看</span>
+                <span v-if="userStore.isLoggedIn && product.originPrice > product.price" class="quick-origin">¥{{ product.originPrice.toFixed(2) }}</span>
               </div>
             </div>
           </div>
@@ -164,7 +165,8 @@
                 <div class="pp-points">
                   <span class="pp-points-num">{{ ptp.points }}</span>
                   <span class="pp-points-label">积分</span>
-                  <span v-if="ptp.cash > 0" class="pp-cash">+¥{{ ptp.cash.toFixed(2) }}</span>
+                  <span v-if="userStore.isLoggedIn && ptp.cash > 0" class="pp-cash">+¥{{ ptp.cash.toFixed(2) }}</span>
+                  <span v-else-if="!userStore.isLoggedIn" class="pp-cash price-mask" @click="userStore.goLogin()">登录后查看</span>
                 </div>
               </div>
             </div>

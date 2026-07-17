@@ -119,7 +119,8 @@
                       消耗{{ order.pointsUsed }}积分
                     </template>
                     <template v-else>
-                      实付 <span class="order-price">¥{{ order.totalPrice.toFixed(2) }}</span>
+                      实付 <span v-if="userStore.isLoggedIn" class="order-price">¥{{ order.totalPrice.toFixed(2) }}</span>
+                      <span v-else class="order-price price-mask" @click="userStore.goLogin()">登录后查看</span>
                     </template>
                   </div>
                   <el-button
@@ -205,7 +206,8 @@
                 </div>
                 <div class="col-info">
                   <div class="col-name text-ellipsis">{{ product.name }}</div>
-                  <div class="col-price">¥{{ product.price.toFixed(2) }}</div>
+                  <div v-if="userStore.isLoggedIn" class="col-price">¥{{ product.price.toFixed(2) }}</div>
+                  <div v-else class="col-price price-mask" @click="userStore.goLogin()">登录后查看</div>
                 </div>
                 <el-icon class="col-star" color="#F59E0B" @click.stop="userStore.toggleCollect(product.id)"><StarFilled /></el-icon>
               </div>

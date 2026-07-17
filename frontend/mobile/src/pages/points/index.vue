@@ -34,7 +34,8 @@
               <view class="product-bottom">
                 <view class="price-wrap">
                   <text class="points-price">{{ product.points }}积分</text>
-                  <text v-if="product.cash > 0" class="cash-price">+¥{{ product.cash.toFixed(2) }}</text>
+                  <text v-if="$auth.isLoggedIn && product.cash > 0" class="cash-price">+¥{{ product.cash.toFixed(2) }}</text>
+                  <text v-else-if="!$auth.isLoggedIn" class="cash-price price-mask" @tap="$auth.goLogin()">登录后查看</text>
                 </view>
                 <text class="stock-text">库存{{ product.stock }}</text>
               </view>

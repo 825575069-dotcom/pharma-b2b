@@ -58,7 +58,8 @@
             <div class="pm-card-points">
               <span class="pm-points-num">{{ ptp.points }}</span>
               <span class="pm-points-label">积分</span>
-              <span v-if="ptp.cash > 0" class="pm-cash">+¥{{ ptp.cash.toFixed(2) }}</span>
+              <span v-if="userStore.isLoggedIn && ptp.cash > 0" class="pm-cash">+¥{{ ptp.cash.toFixed(2) }}</span>
+              <span v-else-if="!userStore.isLoggedIn" class="pm-cash price-mask" @click="userStore.goLogin()">登录后查看</span>
             </div>
             <el-button
               :type="userStore.availablePoints >= ptp.points ? 'primary' : 'info'"

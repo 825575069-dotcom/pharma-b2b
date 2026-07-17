@@ -2,6 +2,7 @@ node_modules/
 dist/
 unpackage/
 .output/
+backend/data/
 .env
 .env.*
 *.local

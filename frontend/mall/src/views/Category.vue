@@ -55,8 +55,9 @@
             </div>
             <div class="product-footer">
               <div class="product-price-row">
-                <span class="product-price">¥{{ product.price.toFixed(2) }}</span>
-                <span v-if="product.originPrice > product.price" class="product-origin">¥{{ product.originPrice.toFixed(2) }}</span>
+                <span v-if="userStore.isLoggedIn" class="product-price">¥{{ product.price.toFixed(2) }}</span>
+                <span v-else class="product-price price-mask" @click="userStore.goLogin()">登录后查看</span>
+                <span v-if="userStore.isLoggedIn && product.originPrice > product.price" class="product-origin">¥{{ product.originPrice.toFixed(2) }}</span>
               </div>
               <div class="product-sales">已售{{ product.sales }}</div>
             </div>
@@ -78,11 +79,13 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Box } from '@element-plus/icons-vue'
 import { useGlobalStore } from '@/stores/global'
+import { useUserStore } from '@/stores/user'
 import { mockProducts } from '@/mock/mockProducts'
 import { mockActivities } from '@/mock/mockActivities'
 
 const route = useRoute()
 const globalStore = useGlobalStore()
+const userStore = useUserStore()
 
 const categories = ['全部', '抗生素类', '解热镇痛', '心脑血管', '清热解毒', '维生素类', '消化系统', '感冒用药', '滋补类', '呼吸系统', '肝胆用药', '抗过敏']
 const sortOptions = [

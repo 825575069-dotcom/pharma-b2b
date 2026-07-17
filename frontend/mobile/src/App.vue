@@ -1,7 +1,17 @@
 <script>
+import authStore from './store/auth.js'
+import store from './store/index.js'
+
 export default {
   onLaunch() {
     console.log('App Launch - 医药B2B商城')
+
+    // 恢复登录态：有 token 则拉取最新用户信息，失败则清退
+    if (authStore.state.token) {
+      authStore.fetchMe()
+        .then(() => { store.state.user = authStore.state.user })
+        .catch(() => { authStore.logout() })
+    }
 
     // #ifdef H5
     // 全局拦截 navigateBack，防止 H5 iframe 环境下历史栈异常跳错页面
@@ -139,5 +149,15 @@ page {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+/* 未登录时价格脱敏 */
+.price-mask {
+  color: #9CA3AF !important;
+  font-weight: 400 !important;
+  font-size: 24rpx;
+  background: #f0f1f5;
+  padding: 2rpx 12rpx;
+  border-radius: 8rpx;
 }
 </style>

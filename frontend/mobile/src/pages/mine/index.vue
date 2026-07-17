@@ -2,17 +2,17 @@
   <view class="page">
     <!-- 顶部用户信息卡 -->
     <view class="header-bg" :style="{ paddingTop: statusBarHeight + 'px' }">
-      <view class="user-card">
+      <view class="user-card" @tap="onUserCardTap">
         <view class="user-top">
           <view class="user-avatar">
             <image v-if="store.state.user.avatar" :src="store.state.user.avatar" mode="aspectFill" style="width: 100%; height: 100%; border-radius: 50%;" />
             <text v-else class="avatar-text">{{ store.state.user.name.charAt(0) }}</text>
           </view>
           <view class="user-info">
-            <text class="user-name">{{ store.state.user.name }}</text>
-            <text class="user-company">{{ store.state.user.company }}</text>
+            <text class="user-name">{{ $auth.isLoggedIn ? store.state.user.name : '点击登录 / 注册' }}</text>
+            <text class="user-company">{{ $auth.isLoggedIn ? store.state.user.company : '登录后查看价格与账户信息' }}</text>
             <view class="user-level">
-              <text class="level-text">{{ store.state.user.level }}</text>
+              <text class="level-text">{{ $auth.isLoggedIn ? store.state.user.level : '未登录' }}</text>
             </view>
           </view>
           <view class="settings-btn" @tap="goSettings">
@@ -136,6 +136,11 @@ export default {
   methods: {
     formatCredit(num) {
       return (num / 10000).toFixed(1) + '万'
+    },
+    onUserCardTap() {
+      if (!this.$auth.isLoggedIn) {
+        this.$auth.goLogin()
+      }
     },
     goSettings() {
       uni.showToast({ title: '设置功能开发中', icon: 'none' })

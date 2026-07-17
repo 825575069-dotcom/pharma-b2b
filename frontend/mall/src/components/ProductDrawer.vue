@@ -37,8 +37,9 @@
 
         <div class="price-section">
           <div class="price-row">
-            <span class="current-price">¥{{ product.price.toFixed(2) }}</span>
-            <span v-if="product.originPrice > product.price" class="origin-price">¥{{ product.originPrice.toFixed(2) }}</span>
+            <span v-if="userStore.isLoggedIn" class="current-price">¥{{ product.price.toFixed(2) }}</span>
+            <span v-else class="current-price price-mask" @click="userStore.goLogin()">登录后查看</span>
+            <span v-if="userStore.isLoggedIn && product.originPrice > product.price" class="origin-price">¥{{ product.originPrice.toFixed(2) }}</span>
           </div>
           <div class="sales-stock">
             <span>已售{{ product.sales }}</span>

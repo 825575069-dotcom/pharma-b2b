@@ -18,7 +18,8 @@
           <text class="item-name ellipsis">{{ item.name }}</text>
           <text class="item-spec">{{ item.spec }}</text>
           <view class="item-bottom">
-            <text class="item-price">¥{{ item.price.toFixed(2) }}</text>
+            <text v-if="$auth.isLoggedIn" class="item-price">¥{{ item.price.toFixed(2) }}</text>
+            <text v-else class="item-price price-mask" @tap="$auth.goLogin()">登录后查看</text>
             <view class="qty-control">
               <view class="qty-btn" @tap="changeQty(item, -1)">
                 <text class="qty-btn-text">-</text>
@@ -50,19 +51,23 @@
       <view class="discount-info">
         <view class="di-row">
           <text class="di-label">商品总额</text>
-          <text class="di-value">¥{{ totalAmount.toFixed(2) }}</text>
+          <text v-if="$auth.isLoggedIn" class="di-value">¥{{ totalAmount.toFixed(2) }}</text>
+          <text v-else class="di-value price-mask" @tap="$auth.goLogin()">登录后查看</text>
         </view>
         <view class="di-row">
           <text class="di-label">满减优惠</text>
-          <text class="di-value text-danger">-¥{{ discountAmount.toFixed(2) }}</text>
+          <text v-if="$auth.isLoggedIn" class="di-value text-danger">-¥{{ discountAmount.toFixed(2) }}</text>
+          <text v-else class="di-value price-mask" @tap="$auth.goLogin()">登录后查看</text>
         </view>
         <view class="di-row">
           <text class="di-label">积分抵扣</text>
-          <text class="di-value text-danger">-¥{{ usePoints ? pointsDeduct.toFixed(2) : '0.00' }}</text>
+          <text v-if="$auth.isLoggedIn" class="di-value text-danger">-¥{{ usePoints ? pointsDeduct.toFixed(2) : '0.00' }}</text>
+          <text v-else class="di-value price-mask" @tap="$auth.goLogin()">登录后查看</text>
         </view>
         <view class="di-row total">
           <text class="di-label">应付金额</text>
-          <text class="di-total">¥{{ finalAmount.toFixed(2) }}</text>
+          <text v-if="$auth.isLoggedIn" class="di-total">¥{{ finalAmount.toFixed(2) }}</text>
+          <text v-else class="di-total price-mask" @tap="$auth.goLogin()">登录后查看</text>
         </view>
       </view>
 
@@ -79,7 +84,8 @@
       </view>
       <view class="bb-center">
         <text class="bb-label">合计:</text>
-        <text class="bb-total">¥{{ finalAmount.toFixed(2) }}</text>
+        <text v-if="$auth.isLoggedIn" class="bb-total">¥{{ finalAmount.toFixed(2) }}</text>
+        <text v-else class="bb-total price-mask" @tap="$auth.goLogin()">登录后查看</text>
       </view>
       <view class="bb-btn" :class="{ disabled: selectedCount === 0 }" @tap="goCheckout">
         <text class="bb-btn-text">结算({{ selectedCount }})</text>
@@ -164,6 +170,10 @@ export default {
       store.toggleSelectAll(!this.allSelected)
     },
     goCheckout() {
+      if (!this.$auth.isLoggedIn) {
+        this.$auth.goLogin()
+        return
+      }
       if (this.selectedCount === 0) {
         uni.showToast({ title: '请选择商品', icon: 'none' })
         return

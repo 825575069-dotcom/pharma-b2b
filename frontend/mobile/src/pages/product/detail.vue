@@ -65,8 +65,9 @@
         <!-- 价格与基本信息 -->
         <view class="info-section">
           <view class="price-row">
-            <text class="price">¥{{ product.price.toFixed(2) }}</text>
-            <text v-if="product.originPrice > product.price" class="origin-price">¥{{ product.originPrice.toFixed(2) }}</text>
+            <text v-if="$auth.isLoggedIn" class="price">¥{{ product.price.toFixed(2) }}</text>
+            <text v-else class="price price-mask" @tap="$auth.goLogin()">登录后查看</text>
+            <text v-if="$auth.isLoggedIn && product.originPrice > product.price" class="origin-price">¥{{ product.originPrice.toFixed(2) }}</text>
             <text class="stock-status">库存有货</text>
           </view>
           <view class="product-title">
@@ -143,7 +144,8 @@
               <image class="recommend-img" :src="p.image" mode="aspectFill" />
               <view class="recommend-info">
                 <text class="recommend-name">{{ p.name }}</text>
-                <text class="recommend-price">¥{{ p.price.toFixed(2) }}</text>
+                <text v-if="$auth.isLoggedIn" class="recommend-price">¥{{ p.price.toFixed(2) }}</text>
+                <text v-else class="recommend-price price-mask" @tap="$auth.goLogin()">登录后查看</text>
               </view>
             </view>
           </view>
@@ -258,6 +260,10 @@ export default {
       uni.showToast({ title: '客服功能开发中', icon: 'none' })
     },
     addToCart() {
+      if (!this.$auth.isLoggedIn) {
+        this.$auth.goLogin()
+        return
+      }
       store.addToCart(this.product, 1)
       uni.showToast({ title: '已加入采购车', icon: 'success' })
     },

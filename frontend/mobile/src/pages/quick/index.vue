@@ -95,7 +95,8 @@
               </view>
               <view class="product-bottom">
                 <view class="price-wrap" @tap="goDetail(product)">
-                  <text class="product-price">¥{{ product.price.toFixed(2) }}</text>
+                  <text v-if="$auth.isLoggedIn" class="product-price">¥{{ product.price.toFixed(2) }}</text>
+                  <text v-else class="product-price price-mask" @tap.stop="$auth.goLogin()">登录后查看</text>
                   <text class="product-unit">/{{ product.unit }}</text>
                 </view>
                 <view class="action-btns">

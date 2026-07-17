@@ -99,3 +99,14 @@ body {
     font-size: 14px;
   }
 }
+
+// 未登录时价格脱敏
+.price-mask {
+  color: $text-secondary !important;
+  font-weight: 400 !important;
+  font-size: 13px;
+  background: #F0F1F5;
+  padding: 2px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}

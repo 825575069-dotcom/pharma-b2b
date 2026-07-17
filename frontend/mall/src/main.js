@@ -17,4 +17,11 @@ app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
 
+// 恢复登录态：有 token 则拉取最新用户信息，失败则清退
+import { useUserStore } from './stores/user'
+const userStore = useUserStore()
+if (userStore.token) {
+  userStore.fetchMe().catch(() => userStore.logout())
+}
+
 app.mount('#app')

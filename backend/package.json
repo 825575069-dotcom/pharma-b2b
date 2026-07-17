@@ -1,9 +1,13 @@
 {
   "name": "pharma-b2b-backend",
   "version": "1.0.0",
-  "description": "Pharma B2B backend placeholder",
+  "description": "Pharma B2B backend (auth + API)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
   }
 }

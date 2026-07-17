@@ -22,8 +22,9 @@
             <div class="item-name text-ellipsis">{{ item.name }}</div>
             <div class="item-spec">{{ item.spec }}</div>
             <div class="item-bottom">
-              <span class="item-price">¥{{ item.price.toFixed(2) }}</span>
-              <span class="item-origin">¥{{ item.originPrice.toFixed(2) }}</span>
+              <span v-if="userStore.isLoggedIn" class="item-price">¥{{ item.price.toFixed(2) }}</span>
+              <span v-else class="item-price price-mask" @click="userStore.goLogin()">登录后查看</span>
+              <span v-if="userStore.isLoggedIn && item.originPrice > item.price" class="item-origin">¥{{ item.originPrice.toFixed(2) }}</span>
               <el-input-number
                 v-model="item.quantity"
                 :min="1"
@@ -69,17 +70,18 @@
         <div class="discount-detail">
           <div class="detail-row">
             <span>商品总额</span>
-            <span>¥{{ cartStore.subtotal.toFixed(2) }}</span>
+            <span v-if="userStore.isLoggedIn">¥{{ cartStore.subtotal.toFixed(2) }}</span>
+            <span v-else class="price-mask" @click="userStore.goLogin()">登录后查看</span>
           </div>
-          <div v-if="cartStore.discountAmount > 0" class="detail-row discount">
+          <div v-if="userStore.isLoggedIn && cartStore.discountAmount > 0" class="detail-row discount">
             <span>满减优惠</span>
             <span>-¥{{ cartStore.discountAmount.toFixed(2) }}</span>
           </div>
-          <div v-if="cartStore.pointsDeduct > 0" class="detail-row discount">
+          <div v-if="userStore.isLoggedIn && cartStore.pointsDeduct > 0" class="detail-row discount">
             <span>积分抵扣</span>
             <span>-¥{{ cartStore.pointsDeduct.toFixed(2) }}</span>
           </div>
-          <div class="detail-row saved">
+          <div v-if="userStore.isLoggedIn" class="detail-row saved">
             <span>已节省</span>
             <span>¥{{ cartStore.savedAmount.toFixed(2) }}</span>
           </div>
@@ -89,7 +91,8 @@
         <div class="footer-bottom">
           <div class="total-section">
             <span class="total-label">合计：</span>
-            <span class="total-price">¥{{ cartStore.finalTotal.toFixed(2) }}</span>
+            <span v-if="userStore.isLoggedIn" class="total-price">¥{{ cartStore.finalTotal.toFixed(2) }}</span>
+            <span v-else class="total-price price-mask" @click="userStore.goLogin()">登录后查看</span>
           </div>
           <el-button
             type="primary"
@@ -111,9 +114,11 @@ import { ref, computed } from 'vue'
 import { Box, Delete, ShoppingCart } from '@element-plus/icons-vue'
 import { useGlobalStore } from '@/stores/global'
 import { useCartStore } from '@/stores/cart'
+import { useUserStore } from '@/stores/user'
 
 const globalStore = useGlobalStore()
 const cartStore = useCartStore()
+const userStore = useUserStore()
 
 const visible = computed({
   get: () => cartStore.drawerVisible,
@@ -123,6 +128,10 @@ const visible = computed({
 const usePoints = ref(false)
 
 const handleCheckout = () => {
+  if (!userStore.isLoggedIn) {
+    userStore.goLogin()
+    return
+  }
   cartStore.toggleDrawer(false)
   setTimeout(() => {
     globalStore.openCheckout()

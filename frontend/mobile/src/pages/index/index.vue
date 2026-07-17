@@ -160,8 +160,9 @@
               </view>
               <view class="product-bottom">
                 <view class="price-wrap">
-                  <text class="product-price">¥{{ product.price.toFixed(2) }}</text>
-                  <text v-if="product.originPrice > product.price" class="product-origin">¥{{ product.originPrice.toFixed(2) }}</text>
+                  <text v-if="$auth.isLoggedIn" class="product-price">¥{{ product.price.toFixed(2) }}</text>
+                  <text v-else class="product-price price-mask" @tap.stop="$auth.goLogin()">登录后查看</text>
+                  <text v-if="$auth.isLoggedIn && product.originPrice > product.price" class="product-origin">¥{{ product.originPrice.toFixed(2) }}</text>
                 </view>
                 <view class="action-btns">
                   <view class="add-btn" @tap.stop="addToCart(product)">
@@ -317,6 +318,10 @@ export default {
       uni.showToast({ title: this.viewMode === 'list' ? '切换为列表' : '切换为网格', icon: 'none' })
     },
     addToCart(product) {
+      if (!this.$auth.isLoggedIn) {
+        this.$auth.goLogin()
+        return
+      }
       store.addToCart(product, 1)
       uni.showToast({ title: '已加入采购车', icon: 'success' })
     },

@@ -52,8 +52,9 @@
             <text class="product-manufacturer ellipsis">{{ product.manufacturer }}</text>
             <view class="product-bottom">
               <view class="product-price-wrap">
-                <text class="product-price">¥{{ product.price.toFixed(2) }}</text>
-                <text v-if="product.originPrice > product.price" class="product-origin">¥{{ product.originPrice.toFixed(2) }}</text>
+                <text v-if="$auth.isLoggedIn" class="product-price">¥{{ product.price.toFixed(2) }}</text>
+                <text v-else class="product-price price-mask" @tap="$auth.goLogin()">登录后查看</text>
+                <text v-if="$auth.isLoggedIn && product.originPrice > product.price" class="product-origin">¥{{ product.originPrice.toFixed(2) }}</text>
               </view>
               <text class="product-sales">已售{{ product.sales }}</text>
             </view>
