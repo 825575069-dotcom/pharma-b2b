@@ -1,7 +1,7 @@
 // 商城装修配置 mock 数据 - 后台设置项
 export const mockMallConfig = {
   // 平台名称，由后台设置，显示在顶部导航栏
-  platformName: '仁心堂医药',
+  platformName: '药企云商城',
   // 底部 slogan
   slogan: '医药B2B私域采购平台',
   // 主题色
