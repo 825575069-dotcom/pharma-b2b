@@ -112,6 +112,13 @@
       </view>
     </view>
 
+    <!-- 退出登录（仅登录态可见） -->
+    <view v-if="$auth.isLoggedIn" class="logout-bar">
+      <view class="logout-btn" @tap="onLogout">
+        <text class="logout-text">退出登录</text>
+      </view>
+    </view>
+
     <view style="height: 40rpx;"></view>
   </view>
 </template>
@@ -141,6 +148,20 @@ export default {
       if (!this.$auth.isLoggedIn) {
         this.$auth.goLogin()
       }
+    },
+    onLogout() {
+      uni.showModal({
+        title: '退出登录',
+        content: '退出后价格将恢复为“登录后查看”，需重新登录才能查看。确定退出？',
+        confirmText: '退出',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            this.$auth.logout()
+            uni.showToast({ title: '已退出登录', icon: 'success' })
+          }
+        }
+      })
     },
     goSettings() {
       uni.showToast({ title: '设置功能开发中', icon: 'none' })
@@ -425,6 +446,30 @@ export default {
       color: #1f2937;
       text-align: center;
       line-height: 1.3;
+    }
+  }
+}
+
+.logout-bar {
+  margin: 12rpx 24rpx 0;
+
+  .logout-btn {
+    height: 88rpx;
+    background: #fff;
+    border-radius: 16rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+
+    .logout-text {
+      font-size: 30rpx;
+      color: #EF4444;
+      font-weight: 600;
+    }
+
+    &:active {
+      background: #fef2f2;
     }
   }
 }

@@ -275,6 +275,14 @@
           </div>
         </el-tab-pane>
       </el-tabs>
+
+      <!-- 退出登录（仅登录态可见） -->
+      <div v-if="userStore.isLoggedIn" class="uc-logout-bar">
+        <el-button class="uc-logout-btn" @click="onLogout">
+          <el-icon :size="16"><SwitchButton /></el-icon>
+          <span>退出登录</span>
+        </el-button>
+      </div>
     </div>
 
     <!-- 物流轨迹弹窗 -->
@@ -308,7 +316,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { Close, User, Box, Star, StarFilled, VideoPlay, Bell, Top, Bottom } from '@element-plus/icons-vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
+import { Close, User, Box, Star, StarFilled, VideoPlay, Bell, Top, Bottom, SwitchButton } from '@element-plus/icons-vue'
 import { useGlobalStore } from '@/stores/global'
 import { useUserStore } from '@/stores/user'
 import { mockProducts } from '@/mock/mockProducts'
@@ -363,6 +372,22 @@ const goToPoints = () => {
 const formatViews = (views) => {
   if (views >= 10000) return (views / 10000).toFixed(1) + '万'
   return views.toString()
+}
+
+const onLogout = () => {
+  ElMessageBox.confirm(
+    '退出登录后，价格将恢复为“登录后查看”，需重新登录才能查看。确定退出？',
+    '退出登录',
+    {
+      confirmButtonText: '退出',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }
+  ).then(() => {
+    userStore.logout()
+    visible.value = false
+    ElMessage.success('已退出登录')
+  }).catch(() => {})
 }
 </script>
 
@@ -487,6 +512,31 @@ const formatViews = (views) => {
 
   :deep(.el-tab-pane) {
     height: 100%;
+  }
+}
+
+.uc-logout-bar {
+  padding: 16px 24px 20px;
+  border-top: 1px solid #F3F4F6;
+  background: #fff;
+
+  .uc-logout-btn {
+    width: 100%;
+    height: 44px;
+    color: #EF4444;
+    border-color: #FCA5A5;
+    font-size: 15px;
+    font-weight: 500;
+
+    &:hover {
+      color: #DC2626;
+      border-color: #F87171;
+      background: #FEF2F2;
+    }
+
+    .el-icon {
+      margin-right: 6px;
+    }
   }
 }
 
