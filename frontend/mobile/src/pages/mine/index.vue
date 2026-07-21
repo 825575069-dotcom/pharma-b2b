@@ -5,8 +5,9 @@
       <view class="user-card" @tap="onUserCardTap">
         <view class="user-top">
           <view class="user-avatar">
-            <image v-if="store.state.user.avatar" :src="store.state.user.avatar" mode="aspectFill" style="width: 100%; height: 100%; border-radius: 50%;" />
-            <text v-else class="avatar-text">{{ store.state.user.name.charAt(0) }}</text>
+            <image v-if="$auth.isLoggedIn && store.state.user && store.state.user.avatar" :src="store.state.user.avatar" mode="aspectFill" style="width: 100%; height: 100%; border-radius: 50%;" />
+            <text v-else-if="$auth.isLoggedIn" class="avatar-text">{{ store.state.user.name.charAt(0) }}</text>
+            <text v-else class="avatar-text">登</text>
           </view>
           <view class="user-info">
             <text class="user-name">{{ $auth.isLoggedIn ? store.state.user.name : '点击登录 / 注册' }}</text>
@@ -20,7 +21,7 @@
           </view>
         </view>
 
-        <view class="user-stats">
+        <view v-if="$auth.isLoggedIn" class="user-stats">
           <view class="stat-item" @tap="goPoints">
             <text class="stat-num">{{ store.state.user.points }}</text>
             <text class="stat-label">我的积分</text>
@@ -125,6 +126,7 @@
 
 <script>
 import { store } from '../../store/index.js'
+import { mockUser } from '../../mock/mockUser.js'
 
 export default {
   data() {
@@ -158,6 +160,9 @@ export default {
         success: (res) => {
           if (res.confirm) {
             this.$auth.logout()
+            // 复位 app store 的用户态，回到与「未登录冷启动」一致的状态
+            // （避免卡片仍显示旧用户名/积分，也避免其它页面访问 null 崩溃）
+            store.state.user = { ...mockUser }
             uni.showToast({ title: '已退出登录', icon: 'success' })
           }
         }
