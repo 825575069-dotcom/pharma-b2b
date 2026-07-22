@@ -38,8 +38,8 @@
             <span class="action-label">购物车</span>
           </div>
 
-          <!-- 个人中心 -->
-          <div class="action-item user-action" @click="globalStore.openUserCenter()">
+          <!-- 个人中心 / 登录入口（随登录态切换） -->
+          <div v-if="userStore.isLoggedIn" class="action-item user-action" @click="globalStore.openUserCenter()">
             <div class="user-avatar">
               <img :src="userStore.userInfo.avatar" alt="" />
             </div>
@@ -48,6 +48,9 @@
               <div class="user-level">{{ userStore.userInfo.level }}</div>
             </div>
           </div>
+          <el-button v-else type="primary" size="small" class="login-entry-btn" @click="userStore.goLogin()">
+            登录 / 注册
+          </el-button>
         </div>
       </div>
     </header>
@@ -168,6 +171,13 @@ const handleSearch = () => {
   .action-label {
     font-size: 13px;
   }
+}
+
+.login-entry-btn {
+  height: 32px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .user-action {
